@@ -5,3 +5,6 @@ verify_jwt = false
 
 [functions.adapt-plan]
 verify_jwt = false
+
+[functions.analyze-meal-photo]
+verify_jwt = true
