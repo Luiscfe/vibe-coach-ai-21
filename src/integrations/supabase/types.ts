@@ -14,16 +14,479 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      adherence_scores: {
+        Row: {
+          created_at: string | null
+          date: string
+          id: string
+          score: number
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          date?: string
+          id?: string
+          score?: number
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          date?: string
+          id?: string
+          score?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
+      chat_messages: {
+        Row: {
+          content: string
+          created_at: string | null
+          id: string
+          role: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string | null
+          id?: string
+          role: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string | null
+          id?: string
+          role?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      cycle_logs: {
+        Row: {
+          created_at: string | null
+          date: string
+          id: string
+          notes: string | null
+          phase: Database["public"]["Enums"]["cycle_phase"] | null
+          symptoms_bloating: number | null
+          symptoms_cramp: number | null
+          symptoms_fatigue: number | null
+          symptoms_mood: number | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          date?: string
+          id?: string
+          notes?: string | null
+          phase?: Database["public"]["Enums"]["cycle_phase"] | null
+          symptoms_bloating?: number | null
+          symptoms_cramp?: number | null
+          symptoms_fatigue?: number | null
+          symptoms_mood?: number | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          date?: string
+          id?: string
+          notes?: string | null
+          phase?: Database["public"]["Enums"]["cycle_phase"] | null
+          symptoms_bloating?: number | null
+          symptoms_cramp?: number | null
+          symptoms_fatigue?: number | null
+          symptoms_mood?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      eating_logs: {
+        Row: {
+          calories: number | null
+          created_at: string | null
+          datetime: string
+          description: string | null
+          evaluation: Database["public"]["Enums"]["meal_evaluation"] | null
+          id: string
+          meal_type: string | null
+          user_id: string
+        }
+        Insert: {
+          calories?: number | null
+          created_at?: string | null
+          datetime?: string
+          description?: string | null
+          evaluation?: Database["public"]["Enums"]["meal_evaluation"] | null
+          id?: string
+          meal_type?: string | null
+          user_id: string
+        }
+        Update: {
+          calories?: number | null
+          created_at?: string | null
+          datetime?: string
+          description?: string | null
+          evaluation?: Database["public"]["Enums"]["meal_evaluation"] | null
+          id?: string
+          meal_type?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      group_members: {
+        Row: {
+          group_id: string
+          id: string
+          joined_at: string | null
+          last_active_at: string | null
+          user_id: string
+        }
+        Insert: {
+          group_id: string
+          id?: string
+          joined_at?: string | null
+          last_active_at?: string | null
+          user_id: string
+        }
+        Update: {
+          group_id?: string
+          id?: string
+          joined_at?: string | null
+          last_active_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "group_members_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "groups"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      group_messages: {
+        Row: {
+          content: string
+          created_at: string | null
+          group_id: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string | null
+          group_id: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string | null
+          group_id?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "group_messages_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "groups"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      groups: {
+        Row: {
+          created_at: string | null
+          goal: Database["public"]["Enums"]["user_goal"]
+          id: string
+          is_full: boolean | null
+          member_count: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          goal: Database["public"]["Enums"]["user_goal"]
+          id?: string
+          is_full?: boolean | null
+          member_count?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          goal?: Database["public"]["Enums"]["user_goal"]
+          id?: string
+          is_full?: boolean | null
+          member_count?: number | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          anchor_recorded_at: string | null
+          anchor_text: string | null
+          anchor_video_url: string | null
+          birth_date: string | null
+          created_at: string | null
+          current_streak: number | null
+          cycle_duration: number | null
+          cycle_start_date: string | null
+          daily_calorie_goal: number | null
+          device_token: string | null
+          dietary_restrictions: string[] | null
+          email: string | null
+          experience_level:
+            | Database["public"]["Enums"]["experience_level"]
+            | null
+          food_dislikes: string | null
+          food_preferences: string | null
+          gender: Database["public"]["Enums"]["user_gender"] | null
+          goal: Database["public"]["Enums"]["user_goal"] | null
+          group_alerts_enabled: boolean | null
+          height: number | null
+          id: string
+          last_active_date: string | null
+          longest_streak: number | null
+          name: string
+          onboarding_completed: boolean | null
+          preferred_workout_time:
+            | Database["public"]["Enums"]["workout_time"]
+            | null
+          sabotage_mode_enabled: boolean | null
+          subscription_status: string | null
+          tracks_cycle: boolean | null
+          updated_at: string | null
+          weight: number | null
+        }
+        Insert: {
+          anchor_recorded_at?: string | null
+          anchor_text?: string | null
+          anchor_video_url?: string | null
+          birth_date?: string | null
+          created_at?: string | null
+          current_streak?: number | null
+          cycle_duration?: number | null
+          cycle_start_date?: string | null
+          daily_calorie_goal?: number | null
+          device_token?: string | null
+          dietary_restrictions?: string[] | null
+          email?: string | null
+          experience_level?:
+            | Database["public"]["Enums"]["experience_level"]
+            | null
+          food_dislikes?: string | null
+          food_preferences?: string | null
+          gender?: Database["public"]["Enums"]["user_gender"] | null
+          goal?: Database["public"]["Enums"]["user_goal"] | null
+          group_alerts_enabled?: boolean | null
+          height?: number | null
+          id: string
+          last_active_date?: string | null
+          longest_streak?: number | null
+          name: string
+          onboarding_completed?: boolean | null
+          preferred_workout_time?:
+            | Database["public"]["Enums"]["workout_time"]
+            | null
+          sabotage_mode_enabled?: boolean | null
+          subscription_status?: string | null
+          tracks_cycle?: boolean | null
+          updated_at?: string | null
+          weight?: number | null
+        }
+        Update: {
+          anchor_recorded_at?: string | null
+          anchor_text?: string | null
+          anchor_video_url?: string | null
+          birth_date?: string | null
+          created_at?: string | null
+          current_streak?: number | null
+          cycle_duration?: number | null
+          cycle_start_date?: string | null
+          daily_calorie_goal?: number | null
+          device_token?: string | null
+          dietary_restrictions?: string[] | null
+          email?: string | null
+          experience_level?:
+            | Database["public"]["Enums"]["experience_level"]
+            | null
+          food_dislikes?: string | null
+          food_preferences?: string | null
+          gender?: Database["public"]["Enums"]["user_gender"] | null
+          goal?: Database["public"]["Enums"]["user_goal"] | null
+          group_alerts_enabled?: boolean | null
+          height?: number | null
+          id?: string
+          last_active_date?: string | null
+          longest_streak?: number | null
+          name?: string
+          onboarding_completed?: boolean | null
+          preferred_workout_time?:
+            | Database["public"]["Enums"]["workout_time"]
+            | null
+          sabotage_mode_enabled?: boolean | null
+          subscription_status?: string | null
+          tracks_cycle?: boolean | null
+          updated_at?: string | null
+          weight?: number | null
+        }
+        Relationships: []
+      }
+      user_memory: {
+        Row: {
+          content: string
+          created_at: string | null
+          id: string
+          memory_type: Database["public"]["Enums"]["memory_type"]
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string | null
+          id?: string
+          memory_type: Database["public"]["Enums"]["memory_type"]
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string | null
+          id?: string
+          memory_type?: Database["public"]["Enums"]["memory_type"]
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string | null
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      workout_logs: {
+        Row: {
+          created_at: string | null
+          date: string
+          duration_minutes: number | null
+          id: string
+          muscle_group: string
+          skip_reason: string | null
+          status: Database["public"]["Enums"]["workout_status"]
+          user_id: string
+          workout_name: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          date?: string
+          duration_minutes?: number | null
+          id?: string
+          muscle_group: string
+          skip_reason?: string | null
+          status: Database["public"]["Enums"]["workout_status"]
+          user_id: string
+          workout_name?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          date?: string
+          duration_minutes?: number | null
+          id?: string
+          muscle_group?: string
+          skip_reason?: string | null
+          status?: Database["public"]["Enums"]["workout_status"]
+          user_id?: string
+          workout_name?: string | null
+        }
+        Relationships: []
+      }
+      workout_plan: {
+        Row: {
+          day_of_week: number
+          duration_minutes: number | null
+          exercises: Json | null
+          id: string
+          intensity: number | null
+          muscle_group: string
+          updated_at: string | null
+          user_id: string
+          workout_name: string
+        }
+        Insert: {
+          day_of_week: number
+          duration_minutes?: number | null
+          exercises?: Json | null
+          id?: string
+          intensity?: number | null
+          muscle_group: string
+          updated_at?: string | null
+          user_id: string
+          workout_name: string
+        }
+        Update: {
+          day_of_week?: number
+          duration_minutes?: number | null
+          exercises?: Json | null
+          id?: string
+          intensity?: number | null
+          muscle_group?: string
+          updated_at?: string | null
+          user_id?: string
+          workout_name?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      is_group_member: {
+        Args: { _group_id: string; _user_id: string }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "user" | "admin"
+      cycle_phase: "menstrual" | "folicular" | "ovulatoria" | "lutea"
+      experience_level: "iniciante" | "intermediario" | "avancado"
+      meal_evaluation: "boa" | "ruim" | "neutra"
+      memory_type:
+        | "food_dislike"
+        | "food_preference"
+        | "skip_pattern"
+        | "emotional_state"
+        | "injury"
+        | "goal_change"
+        | "schedule"
+      user_gender: "feminino" | "masculino" | "outro"
+      user_goal: "emagrecer" | "ganhar_massa" | "definir" | "saude_geral"
+      workout_status: "concluido" | "pulado" | "parcial"
+      workout_time: "manha" | "tarde" | "noite"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +613,24 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["user", "admin"],
+      cycle_phase: ["menstrual", "folicular", "ovulatoria", "lutea"],
+      experience_level: ["iniciante", "intermediario", "avancado"],
+      meal_evaluation: ["boa", "ruim", "neutra"],
+      memory_type: [
+        "food_dislike",
+        "food_preference",
+        "skip_pattern",
+        "emotional_state",
+        "injury",
+        "goal_change",
+        "schedule",
+      ],
+      user_gender: ["feminino", "masculino", "outro"],
+      user_goal: ["emagrecer", "ganhar_massa", "definir", "saude_geral"],
+      workout_status: ["concluido", "pulado", "parcial"],
+      workout_time: ["manha", "tarde", "noite"],
+    },
   },
 } as const
