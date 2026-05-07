@@ -85,12 +85,29 @@ function HomePage() {
         className="mt-4 rounded-3xl border border-border bg-card p-5 shadow-soft">
         <div className="flex items-baseline justify-between">
           <div className="text-xs uppercase tracking-wider text-muted-foreground">Calorias hoje</div>
-          <div className="text-sm"><span className="font-semibold">{todayCal}</span> <span className="text-muted-foreground">/ {calGoal}</span></div>
+          {!editingGoal ? (
+            <button onClick={() => { setGoalInput(String(calGoal)); setEditingGoal(true); }} className="flex items-center gap-1 text-sm">
+              <span className="font-semibold">{todayCal}</span>
+              <span className="text-muted-foreground">/ {calGoal}</span>
+              <Pencil className="size-3 text-muted-foreground" />
+            </button>
+          ) : (
+            <div className="flex items-center gap-1">
+              <input autoFocus value={goalInput} onChange={(e) => setGoalInput(e.target.value)} inputMode="numeric" className="w-20 rounded-lg border border-input bg-background px-2 py-1 text-right text-sm outline-none focus:ring-2 focus:ring-ring" />
+              <button onClick={saveGoal} className="rounded-lg bg-primary px-2 py-1 text-xs text-primary-foreground">OK</button>
+            </div>
+          )}
         </div>
         <div className="mt-3 h-2 overflow-hidden rounded-full bg-muted">
           <motion.div initial={{ width: 0 }} animate={{ width: `${pct}%` }} transition={{ duration: 0.8 }} className="h-full bg-gradient-sunrise" />
         </div>
+        <div className="mt-2 text-xs text-muted-foreground">Restam <span className="font-medium text-foreground">{Math.max(0, calGoal - todayCal)}</span> kcal</div>
       </motion.div>
+
+      <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="mt-4">
+        <MealPhotoScanner onSaved={loadAll} />
+      </motion.div>
+
 
       <div className="mt-4 grid grid-cols-2 gap-3">
         <div className="rounded-3xl border border-border bg-card p-5 shadow-soft">
