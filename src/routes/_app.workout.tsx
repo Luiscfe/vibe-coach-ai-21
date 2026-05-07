@@ -95,6 +95,13 @@ function WorkoutPage() {
           className="mt-4 w-full rounded-2xl border border-dashed border-border py-3 text-sm text-muted-foreground"
         >Gerar plano inicial</button>
       )}
+      <SabotageModal open={sabotage} trigger="skip_workout" onClose={() => { setSabotage(false); }} />
+      {pendingSkip && !sabotage && (
+        <div className="fixed inset-x-0 bottom-28 z-30 mx-auto flex max-w-md gap-2 px-5">
+          <button onClick={() => setPendingSkip(false)} className="flex-1 rounded-full bg-card py-3 text-sm shadow-elev">Vou treinar</button>
+          <button onClick={() => log("pulado")} className="flex-1 rounded-full bg-foreground/80 py-3 text-sm text-primary-foreground shadow-elev">Pular mesmo</button>
+        </div>
+      )}
     </div>
   );
 }
