@@ -4,7 +4,9 @@ import { useAuth } from "@/lib/auth-context";
 import { supabase } from "@/integrations/supabase/client";
 import { calcCyclePhase, PHASE_INFO, dayInCycle } from "@/lib/cycle";
 import { motion } from "framer-motion";
-import { Flame, MessageCircle, Play } from "lucide-react";
+import { Flame, MessageCircle, Play, Pencil } from "lucide-react";
+import { MealPhotoScanner } from "@/components/MealPhotoScanner";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/_app/home")({
   component: HomePage,
@@ -16,19 +18,31 @@ function HomePage() {
   const [todayCal, setTodayCal] = useState(0);
   const [todayWorkout, setTodayWorkout] = useState<any>(null);
 
-  useEffect(() => {
+  const [editingGoal, setEditingGoal] = useState(false);
+  const [goalInput, setGoalInput] = useState("");
+
+  async function loadAll() {
     if (!user) return;
-    (async () => {
-      const { data: p } = await supabase.from("profiles").select("*").eq("id", user.id).single();
-      setProfile(p);
-      const today = new Date().toISOString().slice(0, 10);
-      const { data: meals } = await supabase.from("eating_logs").select("calories").eq("user_id", user.id).gte("datetime", today);
-      setTodayCal((meals ?? []).reduce((a: number, m: any) => a + (m.calories || 0), 0));
-      const dow = new Date().getDay();
-      const { data: w } = await supabase.from("workout_plan").select("*").eq("user_id", user.id).eq("day_of_week", dow).maybeSingle();
-      setTodayWorkout(w);
-    })();
-  }, [user]);
+    const { data: p } = await supabase.from("profiles").select("*").eq("id", user.id).single();
+    setProfile(p);
+    const today = new Date().toISOString().slice(0, 10);
+    const { data: meals } = await supabase.from("eating_logs").select("calories").eq("user_id", user.id).gte("datetime", today);
+    setTodayCal((meals ?? []).reduce((a: number, m: any) => a + (m.calories || 0), 0));
+    const dow = new Date().getDay();
+    const { data: w } = await supabase.from("workout_plan").select("*").eq("user_id", user.id).eq("day_of_week", dow).maybeSingle();
+    setTodayWorkout(w);
+  }
+  useEffect(() => { loadAll(); }, [user]);
+
+  async function saveGoal() {
+    const n = parseInt(goalInput);
+    if (!n || n < 800 || n > 6000) { toast.error("Meta entre 800 e 6000 kcal"); return; }
+    const { error } = await supabase.from("profiles").update({ daily_calorie_goal: n } as any).eq("id", user!.id);
+    if (error) return toast.error(error.message);
+    setProfile({ ...profile, daily_calorie_goal: n });
+    setEditingGoal(false);
+    toast.success("Meta atualizada");
+  }
 
   const hour = new Date().getHours();
   const greet = hour < 12 ? "Bom dia" : hour < 18 ? "Boa tarde" : "Boa noite";
@@ -71,12 +85,29 @@ function HomePage() {
         className="mt-4 rounded-3xl border border-border bg-card p-5 shadow-soft">
         <div className="flex items-baseline justify-between">
           <div className="text-xs uppercase tracking-wider text-muted-foreground">Calorias hoje</div>
-          <div className="text-sm"><span className="font-semibold">{todayCal}</span> <span className="text-muted-foreground">/ {calGoal}</span></div>
+          {!editingGoal ? (
+            <button onClick={() => { setGoalInput(String(calGoal)); setEditingGoal(true); }} className="flex items-center gap-1 text-sm">
+              <span className="font-semibold">{todayCal}</span>
+              <span className="text-muted-foreground">/ {calGoal}</span>
+              <Pencil className="size-3 text-muted-foreground" />
+            </button>
+          ) : (
+            <div className="flex items-center gap-1">
+              <input autoFocus value={goalInput} onChange={(e) => setGoalInput(e.target.value)} inputMode="numeric" className="w-20 rounded-lg border border-input bg-background px-2 py-1 text-right text-sm outline-none focus:ring-2 focus:ring-ring" />
+              <button onClick={saveGoal} className="rounded-lg bg-primary px-2 py-1 text-xs text-primary-foreground">OK</button>
+            </div>
+          )}
         </div>
         <div className="mt-3 h-2 overflow-hidden rounded-full bg-muted">
           <motion.div initial={{ width: 0 }} animate={{ width: `${pct}%` }} transition={{ duration: 0.8 }} className="h-full bg-gradient-sunrise" />
         </div>
+        <div className="mt-2 text-xs text-muted-foreground">Restam <span className="font-medium text-foreground">{Math.max(0, calGoal - todayCal)}</span> kcal</div>
       </motion.div>
+
+      <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="mt-4">
+        <MealPhotoScanner onSaved={loadAll} />
+      </motion.div>
+
 
       <div className="mt-4 grid grid-cols-2 gap-3">
         <div className="rounded-3xl border border-border bg-card p-5 shadow-soft">
