@@ -1,1 +1,7 @@
 project_id = "eoqjfqeakawclwcivrpx"
+
+[functions.coach-chat]
+verify_jwt = false
+
+[functions.adapt-plan]
+verify_jwt = false
