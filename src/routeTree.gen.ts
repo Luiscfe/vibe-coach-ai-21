@@ -9,38 +9,209 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as OnboardingRouteImport } from './routes/onboarding'
+import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as OnboardingProfileRouteImport } from './routes/onboarding.profile'
+import { Route as OnboardingPhysicalRouteImport } from './routes/onboarding.physical'
+import { Route as OnboardingGroupRouteImport } from './routes/onboarding.group'
+import { Route as OnboardingCycleRouteImport } from './routes/onboarding.cycle'
+import { Route as OnboardingAnchorRouteImport } from './routes/onboarding.anchor'
+import { Route as AppWorkoutRouteImport } from './routes/_app.workout'
+import { Route as AppProfileRouteImport } from './routes/_app.profile'
+import { Route as AppHomeRouteImport } from './routes/_app.home'
+import { Route as AppGroupRouteImport } from './routes/_app.group'
+import { Route as AppDietRouteImport } from './routes/_app.diet'
+import { Route as AppCoachRouteImport } from './routes/_app.coach'
 
+const OnboardingRoute = OnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppRoute = AppRouteImport.update({
+  id: '/_app',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OnboardingProfileRoute = OnboardingProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => OnboardingRoute,
+} as any)
+const OnboardingPhysicalRoute = OnboardingPhysicalRouteImport.update({
+  id: '/physical',
+  path: '/physical',
+  getParentRoute: () => OnboardingRoute,
+} as any)
+const OnboardingGroupRoute = OnboardingGroupRouteImport.update({
+  id: '/group',
+  path: '/group',
+  getParentRoute: () => OnboardingRoute,
+} as any)
+const OnboardingCycleRoute = OnboardingCycleRouteImport.update({
+  id: '/cycle',
+  path: '/cycle',
+  getParentRoute: () => OnboardingRoute,
+} as any)
+const OnboardingAnchorRoute = OnboardingAnchorRouteImport.update({
+  id: '/anchor',
+  path: '/anchor',
+  getParentRoute: () => OnboardingRoute,
+} as any)
+const AppWorkoutRoute = AppWorkoutRouteImport.update({
+  id: '/workout',
+  path: '/workout',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppProfileRoute = AppProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppHomeRoute = AppHomeRouteImport.update({
+  id: '/home',
+  path: '/home',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppGroupRoute = AppGroupRouteImport.update({
+  id: '/group',
+  path: '/group',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppDietRoute = AppDietRouteImport.update({
+  id: '/diet',
+  path: '/diet',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppCoachRoute = AppCoachRouteImport.update({
+  id: '/coach',
+  path: '/coach',
+  getParentRoute: () => AppRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/onboarding': typeof OnboardingRouteWithChildren
+  '/coach': typeof AppCoachRoute
+  '/diet': typeof AppDietRoute
+  '/group': typeof AppGroupRoute
+  '/home': typeof AppHomeRoute
+  '/profile': typeof AppProfileRoute
+  '/workout': typeof AppWorkoutRoute
+  '/onboarding/anchor': typeof OnboardingAnchorRoute
+  '/onboarding/cycle': typeof OnboardingCycleRoute
+  '/onboarding/group': typeof OnboardingGroupRoute
+  '/onboarding/physical': typeof OnboardingPhysicalRoute
+  '/onboarding/profile': typeof OnboardingProfileRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/onboarding': typeof OnboardingRouteWithChildren
+  '/coach': typeof AppCoachRoute
+  '/diet': typeof AppDietRoute
+  '/group': typeof AppGroupRoute
+  '/home': typeof AppHomeRoute
+  '/profile': typeof AppProfileRoute
+  '/workout': typeof AppWorkoutRoute
+  '/onboarding/anchor': typeof OnboardingAnchorRoute
+  '/onboarding/cycle': typeof OnboardingCycleRoute
+  '/onboarding/group': typeof OnboardingGroupRoute
+  '/onboarding/physical': typeof OnboardingPhysicalRoute
+  '/onboarding/profile': typeof OnboardingProfileRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_app': typeof AppRouteWithChildren
+  '/onboarding': typeof OnboardingRouteWithChildren
+  '/_app/coach': typeof AppCoachRoute
+  '/_app/diet': typeof AppDietRoute
+  '/_app/group': typeof AppGroupRoute
+  '/_app/home': typeof AppHomeRoute
+  '/_app/profile': typeof AppProfileRoute
+  '/_app/workout': typeof AppWorkoutRoute
+  '/onboarding/anchor': typeof OnboardingAnchorRoute
+  '/onboarding/cycle': typeof OnboardingCycleRoute
+  '/onboarding/group': typeof OnboardingGroupRoute
+  '/onboarding/physical': typeof OnboardingPhysicalRoute
+  '/onboarding/profile': typeof OnboardingProfileRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/onboarding'
+    | '/coach'
+    | '/diet'
+    | '/group'
+    | '/home'
+    | '/profile'
+    | '/workout'
+    | '/onboarding/anchor'
+    | '/onboarding/cycle'
+    | '/onboarding/group'
+    | '/onboarding/physical'
+    | '/onboarding/profile'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/onboarding'
+    | '/coach'
+    | '/diet'
+    | '/group'
+    | '/home'
+    | '/profile'
+    | '/workout'
+    | '/onboarding/anchor'
+    | '/onboarding/cycle'
+    | '/onboarding/group'
+    | '/onboarding/physical'
+    | '/onboarding/profile'
+  id:
+    | '__root__'
+    | '/'
+    | '/_app'
+    | '/onboarding'
+    | '/_app/coach'
+    | '/_app/diet'
+    | '/_app/group'
+    | '/_app/home'
+    | '/_app/profile'
+    | '/_app/workout'
+    | '/onboarding/anchor'
+    | '/onboarding/cycle'
+    | '/onboarding/group'
+    | '/onboarding/physical'
+    | '/onboarding/profile'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AppRoute: typeof AppRouteWithChildren
+  OnboardingRoute: typeof OnboardingRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/onboarding': {
+      id: '/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof OnboardingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_app': {
+      id: '/_app'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,22 +219,131 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/onboarding/profile': {
+      id: '/onboarding/profile'
+      path: '/profile'
+      fullPath: '/onboarding/profile'
+      preLoaderRoute: typeof OnboardingProfileRouteImport
+      parentRoute: typeof OnboardingRoute
+    }
+    '/onboarding/physical': {
+      id: '/onboarding/physical'
+      path: '/physical'
+      fullPath: '/onboarding/physical'
+      preLoaderRoute: typeof OnboardingPhysicalRouteImport
+      parentRoute: typeof OnboardingRoute
+    }
+    '/onboarding/group': {
+      id: '/onboarding/group'
+      path: '/group'
+      fullPath: '/onboarding/group'
+      preLoaderRoute: typeof OnboardingGroupRouteImport
+      parentRoute: typeof OnboardingRoute
+    }
+    '/onboarding/cycle': {
+      id: '/onboarding/cycle'
+      path: '/cycle'
+      fullPath: '/onboarding/cycle'
+      preLoaderRoute: typeof OnboardingCycleRouteImport
+      parentRoute: typeof OnboardingRoute
+    }
+    '/onboarding/anchor': {
+      id: '/onboarding/anchor'
+      path: '/anchor'
+      fullPath: '/onboarding/anchor'
+      preLoaderRoute: typeof OnboardingAnchorRouteImport
+      parentRoute: typeof OnboardingRoute
+    }
+    '/_app/workout': {
+      id: '/_app/workout'
+      path: '/workout'
+      fullPath: '/workout'
+      preLoaderRoute: typeof AppWorkoutRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/profile': {
+      id: '/_app/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof AppProfileRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/home': {
+      id: '/_app/home'
+      path: '/home'
+      fullPath: '/home'
+      preLoaderRoute: typeof AppHomeRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/group': {
+      id: '/_app/group'
+      path: '/group'
+      fullPath: '/group'
+      preLoaderRoute: typeof AppGroupRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/diet': {
+      id: '/_app/diet'
+      path: '/diet'
+      fullPath: '/diet'
+      preLoaderRoute: typeof AppDietRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/coach': {
+      id: '/_app/coach'
+      path: '/coach'
+      fullPath: '/coach'
+      preLoaderRoute: typeof AppCoachRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
+interface AppRouteChildren {
+  AppCoachRoute: typeof AppCoachRoute
+  AppDietRoute: typeof AppDietRoute
+  AppGroupRoute: typeof AppGroupRoute
+  AppHomeRoute: typeof AppHomeRoute
+  AppProfileRoute: typeof AppProfileRoute
+  AppWorkoutRoute: typeof AppWorkoutRoute
+}
+
+const AppRouteChildren: AppRouteChildren = {
+  AppCoachRoute: AppCoachRoute,
+  AppDietRoute: AppDietRoute,
+  AppGroupRoute: AppGroupRoute,
+  AppHomeRoute: AppHomeRoute,
+  AppProfileRoute: AppProfileRoute,
+  AppWorkoutRoute: AppWorkoutRoute,
+}
+
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
+
+interface OnboardingRouteChildren {
+  OnboardingAnchorRoute: typeof OnboardingAnchorRoute
+  OnboardingCycleRoute: typeof OnboardingCycleRoute
+  OnboardingGroupRoute: typeof OnboardingGroupRoute
+  OnboardingPhysicalRoute: typeof OnboardingPhysicalRoute
+  OnboardingProfileRoute: typeof OnboardingProfileRoute
+}
+
+const OnboardingRouteChildren: OnboardingRouteChildren = {
+  OnboardingAnchorRoute: OnboardingAnchorRoute,
+  OnboardingCycleRoute: OnboardingCycleRoute,
+  OnboardingGroupRoute: OnboardingGroupRoute,
+  OnboardingPhysicalRoute: OnboardingPhysicalRoute,
+  OnboardingProfileRoute: OnboardingProfileRoute,
+}
+
+const OnboardingRouteWithChildren = OnboardingRoute._addFileChildren(
+  OnboardingRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AppRoute: AppRouteWithChildren,
+  OnboardingRoute: OnboardingRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
