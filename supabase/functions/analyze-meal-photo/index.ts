@@ -43,6 +43,9 @@ Deno.serve(async (req) => {
                 properties: {
                   description: { type: "string", description: "Descrição curta da refeição (ex: 'Frango grelhado, arroz e salada')" },
                   calories: { type: "integer", description: "Calorias totais estimadas em kcal" },
+                  protein_g: { type: "number", description: "Proteínas totais em gramas" },
+                  carbs_g: { type: "number", description: "Carboidratos totais em gramas" },
+                  fat_g: { type: "number", description: "Gorduras totais em gramas" },
                   items: {
                     type: "array",
                     items: {
@@ -57,7 +60,7 @@ Deno.serve(async (req) => {
                   },
                   evaluation: { type: "string", enum: ["boa", "neutra", "ruim"], description: "boa = saudável e alinhada com objetivo, neutra = ok, ruim = ultraprocessada/excesso de açúcar/fritura" },
                 },
-                required: ["description", "calories", "items", "evaluation"],
+                required: ["description", "calories", "protein_g", "carbs_g", "fat_g", "items", "evaluation"],
               },
             },
           },
