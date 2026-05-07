@@ -22,6 +22,7 @@ import { Route as AppProfileRouteImport } from './routes/_app.profile'
 import { Route as AppHomeRouteImport } from './routes/_app.home'
 import { Route as AppGroupRouteImport } from './routes/_app.group'
 import { Route as AppDietRouteImport } from './routes/_app.diet'
+import { Route as AppCycleRouteImport } from './routes/_app.cycle'
 import { Route as AppCoachRouteImport } from './routes/_app.coach'
 
 const OnboardingRoute = OnboardingRouteImport.update({
@@ -88,6 +89,11 @@ const AppDietRoute = AppDietRouteImport.update({
   path: '/diet',
   getParentRoute: () => AppRoute,
 } as any)
+const AppCycleRoute = AppCycleRouteImport.update({
+  id: '/cycle',
+  path: '/cycle',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppCoachRoute = AppCoachRouteImport.update({
   id: '/coach',
   path: '/coach',
@@ -98,6 +104,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/onboarding': typeof OnboardingRouteWithChildren
   '/coach': typeof AppCoachRoute
+  '/cycle': typeof AppCycleRoute
   '/diet': typeof AppDietRoute
   '/group': typeof AppGroupRoute
   '/home': typeof AppHomeRoute
@@ -113,6 +120,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/onboarding': typeof OnboardingRouteWithChildren
   '/coach': typeof AppCoachRoute
+  '/cycle': typeof AppCycleRoute
   '/diet': typeof AppDietRoute
   '/group': typeof AppGroupRoute
   '/home': typeof AppHomeRoute
@@ -130,6 +138,7 @@ export interface FileRoutesById {
   '/_app': typeof AppRouteWithChildren
   '/onboarding': typeof OnboardingRouteWithChildren
   '/_app/coach': typeof AppCoachRoute
+  '/_app/cycle': typeof AppCycleRoute
   '/_app/diet': typeof AppDietRoute
   '/_app/group': typeof AppGroupRoute
   '/_app/home': typeof AppHomeRoute
@@ -147,6 +156,7 @@ export interface FileRouteTypes {
     | '/'
     | '/onboarding'
     | '/coach'
+    | '/cycle'
     | '/diet'
     | '/group'
     | '/home'
@@ -162,6 +172,7 @@ export interface FileRouteTypes {
     | '/'
     | '/onboarding'
     | '/coach'
+    | '/cycle'
     | '/diet'
     | '/group'
     | '/home'
@@ -178,6 +189,7 @@ export interface FileRouteTypes {
     | '/_app'
     | '/onboarding'
     | '/_app/coach'
+    | '/_app/cycle'
     | '/_app/diet'
     | '/_app/group'
     | '/_app/home'
@@ -289,6 +301,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppDietRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/cycle': {
+      id: '/_app/cycle'
+      path: '/cycle'
+      fullPath: '/cycle'
+      preLoaderRoute: typeof AppCycleRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/coach': {
       id: '/_app/coach'
       path: '/coach'
@@ -301,6 +320,7 @@ declare module '@tanstack/react-router' {
 
 interface AppRouteChildren {
   AppCoachRoute: typeof AppCoachRoute
+  AppCycleRoute: typeof AppCycleRoute
   AppDietRoute: typeof AppDietRoute
   AppGroupRoute: typeof AppGroupRoute
   AppHomeRoute: typeof AppHomeRoute
@@ -310,6 +330,7 @@ interface AppRouteChildren {
 
 const AppRouteChildren: AppRouteChildren = {
   AppCoachRoute: AppCoachRoute,
+  AppCycleRoute: AppCycleRoute,
   AppDietRoute: AppDietRoute,
   AppGroupRoute: AppGroupRoute,
   AppHomeRoute: AppHomeRoute,

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/lib/auth-context";
 import { supabase } from "@/integrations/supabase/client";
 import { BottomNav } from "@/components/BottomNav";
+import { CoachFab } from "@/components/CoachFab";
 
 export const Route = createFileRoute("/_app")({
   component: AppShell,
@@ -29,6 +30,7 @@ function AppShell() {
       <div className="mx-auto max-w-md">
         <Outlet />
       </div>
+      <CoachFab />
       <BottomNav />
     </div>
   );

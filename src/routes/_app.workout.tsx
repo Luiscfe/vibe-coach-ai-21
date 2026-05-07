@@ -4,6 +4,7 @@ import { useAuth } from "@/lib/auth-context";
 import { supabase } from "@/integrations/supabase/client";
 import { Check, X } from "lucide-react";
 import { toast } from "sonner";
+import { SabotageModal } from "@/components/SabotageModal";
 
 export const Route = createFileRoute("/_app/workout")({ component: WorkoutPage });
 
@@ -13,6 +14,8 @@ function WorkoutPage() {
   const { user } = useAuth();
   const [plan, setPlan] = useState<any[]>([]);
   const [todayLog, setTodayLog] = useState<any>(null);
+  const [sabotage, setSabotage] = useState(false);
+  const [pendingSkip, setPendingSkip] = useState(false);
 
   async function load() {
     if (!user) return;
@@ -29,12 +32,18 @@ function WorkoutPage() {
 
   async function log(status: "concluido" | "pulado") {
     if (!today) return toast.error("Sem treino hoje");
+    if (status === "pulado" && !pendingSkip) {
+      setSabotage(true);
+      setPendingSkip(true);
+      return;
+    }
     const { error } = await supabase.from("workout_logs").insert({
       user_id: user!.id, muscle_group: today.muscle_group, workout_name: today.workout_name,
       duration_minutes: today.duration_minutes, status,
     });
     if (error) return toast.error(error.message);
     toast.success(status === "concluido" ? "Mandou bem!" : "Tudo bem, amanhã é outro dia");
+    setPendingSkip(false);
     load();
   }
 
@@ -85,6 +94,13 @@ function WorkoutPage() {
           }}
           className="mt-4 w-full rounded-2xl border border-dashed border-border py-3 text-sm text-muted-foreground"
         >Gerar plano inicial</button>
+      )}
+      <SabotageModal open={sabotage} trigger="skip_workout" onClose={() => { setSabotage(false); }} />
+      {pendingSkip && !sabotage && (
+        <div className="fixed inset-x-0 bottom-28 z-30 mx-auto flex max-w-md gap-2 px-5">
+          <button onClick={() => setPendingSkip(false)} className="flex-1 rounded-full bg-card py-3 text-sm shadow-elev">Vou treinar</button>
+          <button onClick={() => log("pulado")} className="flex-1 rounded-full bg-foreground/80 py-3 text-sm text-primary-foreground shadow-elev">Pular mesmo</button>
+        </div>
       )}
     </div>
   );
