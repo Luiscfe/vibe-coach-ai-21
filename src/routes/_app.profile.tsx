@@ -12,8 +12,8 @@ function ProfilePage() {
   const [p, setP] = useState<any>(null);
   useEffect(() => { if (user) supabase.from("profiles").select("*").eq("id", user.id).single().then(({ data }) => setP(data)); }, [user]);
 
-  async function toggle(field: string, value: boolean) {
-    await supabase.from("profiles").update({ [field]: value }).eq("id", user!.id);
+  async function toggle(field: "sabotage_mode_enabled" | "group_alerts_enabled", value: boolean) {
+    await supabase.from("profiles").update({ [field]: value } as any).eq("id", user!.id);
     setP({ ...p, [field]: value });
     toast.success("Atualizado");
   }
