@@ -104,32 +104,44 @@ export type Database = {
       eating_logs: {
         Row: {
           calories: number | null
+          carbs_g: number | null
           created_at: string | null
           datetime: string
           description: string | null
           evaluation: Database["public"]["Enums"]["meal_evaluation"] | null
+          fat_g: number | null
           id: string
+          image_url: string | null
           meal_type: string | null
+          protein_g: number | null
           user_id: string
         }
         Insert: {
           calories?: number | null
+          carbs_g?: number | null
           created_at?: string | null
           datetime?: string
           description?: string | null
           evaluation?: Database["public"]["Enums"]["meal_evaluation"] | null
+          fat_g?: number | null
           id?: string
+          image_url?: string | null
           meal_type?: string | null
+          protein_g?: number | null
           user_id: string
         }
         Update: {
           calories?: number | null
+          carbs_g?: number | null
           created_at?: string | null
           datetime?: string
           description?: string | null
           evaluation?: Database["public"]["Enums"]["meal_evaluation"] | null
+          fat_g?: number | null
           id?: string
+          image_url?: string | null
           meal_type?: string | null
+          protein_g?: number | null
           user_id?: string
         }
         Relationships: []
@@ -233,6 +245,9 @@ export type Database = {
           cycle_duration: number | null
           cycle_start_date: string | null
           daily_calorie_goal: number | null
+          daily_carbs_goal: number | null
+          daily_fat_goal: number | null
+          daily_protein_goal: number | null
           device_token: string | null
           dietary_restrictions: string[] | null
           email: string | null
@@ -269,6 +284,9 @@ export type Database = {
           cycle_duration?: number | null
           cycle_start_date?: string | null
           daily_calorie_goal?: number | null
+          daily_carbs_goal?: number | null
+          daily_fat_goal?: number | null
+          daily_protein_goal?: number | null
           device_token?: string | null
           dietary_restrictions?: string[] | null
           email?: string | null
@@ -305,6 +323,9 @@ export type Database = {
           cycle_duration?: number | null
           cycle_start_date?: string | null
           daily_calorie_goal?: number | null
+          daily_carbs_goal?: number | null
+          daily_fat_goal?: number | null
+          daily_protein_goal?: number | null
           device_token?: string | null
           dietary_restrictions?: string[] | null
           email?: string | null
