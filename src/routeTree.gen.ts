@@ -24,6 +24,7 @@ import { Route as AppGroupRouteImport } from './routes/_app.group'
 import { Route as AppDietRouteImport } from './routes/_app.diet'
 import { Route as AppCycleRouteImport } from './routes/_app.cycle'
 import { Route as AppCoachRouteImport } from './routes/_app.coach'
+import { Route as AppAnchorRouteImport } from './routes/_app.anchor'
 
 const OnboardingRoute = OnboardingRouteImport.update({
   id: '/onboarding',
@@ -99,10 +100,16 @@ const AppCoachRoute = AppCoachRouteImport.update({
   path: '/coach',
   getParentRoute: () => AppRoute,
 } as any)
+const AppAnchorRoute = AppAnchorRouteImport.update({
+  id: '/anchor',
+  path: '/anchor',
+  getParentRoute: () => AppRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/onboarding': typeof OnboardingRouteWithChildren
+  '/anchor': typeof AppAnchorRoute
   '/coach': typeof AppCoachRoute
   '/cycle': typeof AppCycleRoute
   '/diet': typeof AppDietRoute
@@ -119,6 +126,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/onboarding': typeof OnboardingRouteWithChildren
+  '/anchor': typeof AppAnchorRoute
   '/coach': typeof AppCoachRoute
   '/cycle': typeof AppCycleRoute
   '/diet': typeof AppDietRoute
@@ -137,6 +145,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_app': typeof AppRouteWithChildren
   '/onboarding': typeof OnboardingRouteWithChildren
+  '/_app/anchor': typeof AppAnchorRoute
   '/_app/coach': typeof AppCoachRoute
   '/_app/cycle': typeof AppCycleRoute
   '/_app/diet': typeof AppDietRoute
@@ -155,6 +164,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/onboarding'
+    | '/anchor'
     | '/coach'
     | '/cycle'
     | '/diet'
@@ -171,6 +181,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/onboarding'
+    | '/anchor'
     | '/coach'
     | '/cycle'
     | '/diet'
@@ -188,6 +199,7 @@ export interface FileRouteTypes {
     | '/'
     | '/_app'
     | '/onboarding'
+    | '/_app/anchor'
     | '/_app/coach'
     | '/_app/cycle'
     | '/_app/diet'
@@ -315,10 +327,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppCoachRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/anchor': {
+      id: '/_app/anchor'
+      path: '/anchor'
+      fullPath: '/anchor'
+      preLoaderRoute: typeof AppAnchorRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
 interface AppRouteChildren {
+  AppAnchorRoute: typeof AppAnchorRoute
   AppCoachRoute: typeof AppCoachRoute
   AppCycleRoute: typeof AppCycleRoute
   AppDietRoute: typeof AppDietRoute
@@ -329,6 +349,7 @@ interface AppRouteChildren {
 }
 
 const AppRouteChildren: AppRouteChildren = {
+  AppAnchorRoute: AppAnchorRoute,
   AppCoachRoute: AppCoachRoute,
   AppCycleRoute: AppCycleRoute,
   AppDietRoute: AppDietRoute,
