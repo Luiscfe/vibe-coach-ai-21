@@ -52,7 +52,7 @@ function Landing() {
       <div className="mx-auto max-w-md px-6 pt-20 pb-12">
         <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
           <h1 className="mb-12 text-center text-5xl">
-            <span className="text-gradient-sunrise italic">Nutri AI</span>
+            <span className="text-gradient-sunrise italic" style={{display:"block", textAlign:"center", width:"100%"}}>FITT AI</span>
           </h1>
 
           <form onSubmit={submit} className="space-y-3 rounded-3xl border border-border/60 bg-card p-6 shadow-soft">
