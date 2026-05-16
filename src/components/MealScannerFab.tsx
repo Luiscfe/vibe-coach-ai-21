@@ -16,46 +16,13 @@ interface Result {
 }
 
 async function analyzeWithClaude(imageBase64: string): Promise<Result> {
-  const base64Data = imageBase64.split(",")[1];
-  const mediaType = imageBase64.split(";")[0].split(":")[1] as "image/jpeg" | "image/png" | "image/webp";
-
-  const response = await fetch("https://api.anthropic.com/v1/messages", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      model: "claude-sonnet-4-20250514",
-      max_tokens: 1000,
-      messages: [{
-        role: "user",
-        content: [
-          {
-            type: "image",
-            source: { type: "base64", media_type: mediaType, data: base64Data },
-          },
-          {
-            type: "text",
-            text: `Analise esta foto de refeição e retorne SOMENTE um JSON válido, sem texto adicional, no formato:
-{
-  "description": "descrição resumida da refeição em português",
-  "calories": número total estimado de calorias,
-  "protein_g": gramas de proteína,
-  "carbs_g": gramas de carboidrato,
-  "fat_g": gramas de gordura,
-  "items": [{"name": "nome do item", "portion": "porção estimada", "calories": calorias}],
-  "evaluation": "boa" ou "neutra" ou "ruim"
-}
-Seja preciso nas estimativas nutricionais. evaluation: "boa" = refeição saudável, "ruim" = muito calórica ou ultraprocessada, "neutra" = intermediária.`,
-          },
-        ],
-      }],
-    }),
+  const { data, error } = await supabase.functions.invoke("analyze-meal-photo", {
+    body: { imageBase64 },
   });
-
-  if (!response.ok) throw new Error("Erro ao analisar imagem");
-  const data = await response.json();
-  const text = data.content?.[0]?.text ?? "";
-  const clean = text.replace(/```json|```/g, "").trim();
-  return JSON.parse(clean) as Result;
+  if (error) throw error;
+  if (data?.error) throw new Error(data.error);
+  return data as Result;
+}
 }
 
 export function MealScannerFab({ onSaved }: { onSaved?: () => void }) {
