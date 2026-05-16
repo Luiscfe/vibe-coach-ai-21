@@ -3,7 +3,8 @@ import { MessageCircle } from "lucide-react";
 
 export function CoachFab() {
   const path = useRouterState({ select: (s) => s.location.pathname });
-  if (path.startsWith("/coach")) return null;
+  // Hide on coach page itself and on /home (home has its own chat bar at top)
+  if (path.startsWith("/coach") || path.startsWith("/home")) return null;
   return (
     <Link to="/coach" className="fixed bottom-24 right-5 z-40 grid size-14 place-items-center rounded-full bg-gradient-ember text-primary-foreground shadow-warm active:scale-95 transition">
       <MessageCircle className="size-6" />

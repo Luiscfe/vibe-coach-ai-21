@@ -1,4 +1,4 @@
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
@@ -19,7 +19,6 @@ function Landing() {
 
   useEffect(() => {
     if (!loading && user) {
-      // Check onboarding
       supabase.from("profiles").select("onboarding_completed").eq("id", user.id).single().then(({ data }) => {
         if (data?.onboarding_completed) window.location.href = "/home";
         else window.location.href = "/onboarding/profile";
@@ -49,22 +48,12 @@ function Landing() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-soft relative overflow-hidden">
-      <div className="glow-warm absolute inset-0" />
-      <div className="relative mx-auto max-w-md px-6 pt-16 pb-12">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-          <div className="mb-12 text-center">
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-border/60 bg-card/80 px-4 py-1.5 text-xs backdrop-blur">
-              <span className="size-1.5 rounded-full bg-primary animate-pulse" />
-              <span className="text-muted-foreground">Coach pessoal com IA</span>
-            </div>
-            <h1 className="text-5xl leading-[1.05]">
-              Sua versão <span className="text-gradient-sunrise italic">mais forte</span><br />começa agora.
-            </h1>
-            <p className="mt-4 text-muted-foreground">
-              Treino, dieta e ciclo adaptados ao seu corpo. Sem genérico, sem julgamento.
-            </p>
-          </div>
+    <main className="min-h-screen" style={{ background: "#fff7ed" }}>
+      <div className="mx-auto max-w-md px-6 pt-20 pb-12">
+        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+          <h1 className="mb-12 text-center text-5xl">
+            <span className="text-gradient-sunrise italic">Nutri AI</span>
+          </h1>
 
           <form onSubmit={submit} className="space-y-3 rounded-3xl border border-border/60 bg-card p-6 shadow-soft">
             <div className="mb-2 flex gap-2 rounded-full bg-muted p-1 text-sm">
@@ -80,10 +69,6 @@ function Landing() {
               {busy ? "Aguarde…" : mode === "signup" ? "Começar" : "Entrar"}
             </button>
           </form>
-
-          <p className="mt-6 text-center text-xs text-muted-foreground">
-            Ao criar uma conta você aceita os termos do Nutri AI.
-          </p>
         </motion.div>
       </div>
     </main>
