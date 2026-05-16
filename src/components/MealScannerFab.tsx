@@ -23,7 +23,7 @@ async function analyzeWithClaude(imageBase64: string): Promise<Result> {
   if (data?.error) throw new Error(data.error);
   return data as Result;
 }
-}
+
 
 export function MealScannerFab({ onSaved }: { onSaved?: () => void }) {
   const { user } = useAuth();
