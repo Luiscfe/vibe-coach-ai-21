@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useAuth } from "@/lib/auth-context";
 import { supabase } from "@/integrations/supabase/client";
 import { motion } from "framer-motion";
@@ -15,10 +15,18 @@ function HomePage() {
   const [profile, setProfile] = useState<any>(null);
   const [meals, setMeals] = useState<any[]>([]);
 
-  async function loadAll() {
+  const loadProfile = useCallback(async () => {
     if (!user) return;
-    const { data: p } = await supabase.from("profiles").select("*").eq("id", user.id).single();
+    const { data: p } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("id", user.id)
+      .single();
     setProfile(p);
+  }, [user]);
+
+  const loadMeals = useCallback(async () => {
+    if (!user) return;
     const today = new Date().toISOString().slice(0, 10);
     const { data: m } = await supabase
       .from("eating_logs")
@@ -27,8 +35,42 @@ function HomePage() {
       .gte("datetime", today)
       .order("datetime", { ascending: false });
     setMeals(m ?? []);
-  }
-  useEffect(() => { loadAll(); }, [user]);
+  }, [user]);
+
+  useEffect(() => {
+    loadProfile();
+    loadMeals();
+  }, [loadProfile, loadMeals]);
+
+  // Atualização em tempo real via Supabase Realtime
+  useEffect(() => {
+    if (!user) return;
+    const today = new Date().toISOString().slice(0, 10);
+    const channel = supabase
+      .channel("eating_logs_realtime")
+      .on(
+        "postgres_changes",
+        {
+          event: "INSERT",
+          schema: "public",
+          table: "eating_logs",
+          filter: `user_id=eq.${user.id}`,
+        },
+        (payload) => {
+          // Adiciona imediatamente no estado local sem esperar o banco
+          const newMeal = payload.new as any;
+          const mealDate = newMeal.datetime?.slice(0, 10);
+          if (mealDate === today) {
+            setMeals((prev) => [newMeal, ...prev]);
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [user]);
 
   const totals = meals.reduce(
     (a, m: any) => ({
@@ -45,6 +87,13 @@ function HomePage() {
   const cGoal = profile?.daily_carbs_goal ?? 442;
   const fGoal = profile?.daily_fat_goal ?? 102;
 
+  // Função chamada pelo MealScannerFab após salvar
+  // Não rebusca do banco — o Realtime já cuida disso
+  function handleMealSaved() {
+    // Pequeno delay para garantir que o Realtime já recebeu
+    setTimeout(() => loadMeals(), 500);
+  }
+
   return (
     <div className="px-5 pt-6 pb-32">
       <div className="mb-5">
@@ -54,7 +103,12 @@ function HomePage() {
         <CalorieArc consumed={totals.cal} goal={calGoal} />
       </motion.div>
 
-      <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="mt-8">
+      <motion.div
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+        className="mt-8"
+      >
         <MacroCards
           protein={{ current: totals.p, goal: pGoal }}
           carbs={{ current: totals.c, goal: cGoal }}
@@ -66,7 +120,9 @@ function HomePage() {
         <h2 className="text-center text-base font-semibold">Hoje</h2>
         <div className="mt-4 space-y-3">
           {meals.length === 0 && (
-            <p className="text-center text-sm text-muted-foreground">Nenhuma refeição registrada hoje.</p>
+            <p className="text-center text-sm text-muted-foreground">
+              Nenhuma refeição registrada hoje.
+            </p>
           )}
           {meals.map((m: any) => (
             <MealRow key={m.id} meal={m} />
@@ -74,18 +130,25 @@ function HomePage() {
         </div>
       </div>
 
-      <MealScannerFab onSaved={loadAll} />
+      <MealScannerFab onSaved={handleMealSaved} />
     </div>
   );
 }
 
 function MealRow({ meal }: { meal: any }) {
-  const time = new Date(meal.datetime).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+  const time = new Date(meal.datetime).toLocaleTimeString("pt-BR", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
   return (
     <div className="flex items-center gap-3 rounded-2xl border border-border bg-card p-3 shadow-soft">
       <div className="size-16 shrink-0 overflow-hidden rounded-xl bg-muted">
         {meal.image_url ? (
-          <img src={meal.image_url} alt={meal.description} className="size-full object-cover" />
+          <img
+            src={meal.image_url}
+            alt={meal.description}
+            className="size-full object-cover"
+          />
         ) : (
           <div className="grid size-full place-items-center text-2xl">🍽️</div>
         )}
@@ -96,9 +159,15 @@ function MealRow({ meal }: { meal: any }) {
           {time} · {meal.calories ?? 0} kcal
         </div>
         <div className="mt-1 flex gap-2 text-[10px] text-muted-foreground">
-          <span><b className="text-destructive">{Math.round(Number(meal.protein_g || 0))}g</b> P</span>
-          <span><b className="text-primary">{Math.round(Number(meal.carbs_g || 0))}g</b> C</span>
-          <span><b className="text-[oklch(0.6_0.15_230)]">{Math.round(Number(meal.fat_g || 0))}g</b> G</span>
+          <span>
+            <b className="text-destructive">{Math.round(Number(meal.protein_g || 0))}g</b> P
+          </span>
+          <span>
+            <b className="text-primary">{Math.round(Number(meal.carbs_g || 0))}g</b> C
+          </span>
+          <span>
+            <b className="text-[oklch(0.6_0.15_230)]">{Math.round(Number(meal.fat_g || 0))}g</b> G
+          </span>
         </div>
       </div>
     </div>
