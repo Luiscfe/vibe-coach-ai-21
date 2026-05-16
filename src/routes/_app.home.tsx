@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { CalorieArc } from "@/components/CalorieArc";
 import { MacroCards } from "@/components/MacroCards";
 import { MealScannerFab } from "@/components/MealScannerFab";
+import { CoachPromptBar } from "@/components/CoachPromptBar";
 
 export const Route = createFileRoute("/_app/home")({ component: HomePage });
 
@@ -45,7 +46,10 @@ function HomePage() {
   const fGoal = profile?.daily_fat_goal ?? 102;
 
   return (
-    <div className="px-5 pt-8 pb-32">
+    <div className="px-5 pt-6 pb-32">
+      <div className="mb-5">
+        <CoachPromptBar />
+      </div>
       <motion.div initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }}>
         <CalorieArc consumed={totals.cal} goal={calGoal} />
       </motion.div>
