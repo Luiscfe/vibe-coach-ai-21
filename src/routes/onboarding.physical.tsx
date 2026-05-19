@@ -148,7 +148,7 @@ function PhysicalStep() {
       weight: w,
       height: h,
       birth_date: birth.toISOString().slice(0, 10),
-      target_weight: tw,
+      
       experience_level: level as any,
       preferred_workout_time: time as any,
       dietary_restrictions: diet,
