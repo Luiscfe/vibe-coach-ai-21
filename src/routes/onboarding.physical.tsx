@@ -13,14 +13,60 @@ const restrictions = [
 export const Route = createFileRoute("/onboarding/physical")({
   component: PhysicalStep,
 });
-
-// Fórmula de Mifflin-St Jeor com TDEE e ajuste por meta de peso
 function calcCalories(
   weight: number,
   height: number,
   age: number,
   goal: string,
   targetWeight: number | null,
+  gender: string
+): { calories: number; weeklyChange: number; weeksToGoal: number | null } {
+  const bmr = gender === "feminino"
+    ? 10 * weight + 6.25 * height - 5 * age - 161
+    : 10 * weight + 6.25 * height - 5 * age + 5;
+
+  const tdee = Math.round(bmr * 1.4);
+
+  let calories = tdee;
+  let deficit = 500;
+  let weeksToGoal: number | null = null;
+
+  if (goal === "emagrecer") {
+    if (targetWeight && targetWeight < weight) {
+      const diff = weight - targetWeight;
+      // Déficit proporcional à meta
+      if (diff <= 5) deficit = 300;
+      else if (diff <= 15) deficit = 500;
+      else if (diff <= 30) deficit = 700;
+      else deficit = 1000;
+    }
+    calories = Math.max(1200, tdee - deficit);
+    const weeklyKg = (tdee - calories) / 7700 * 7;
+    const weeklyChange = -Math.round(weeklyKg * 10) / 10;
+    if (targetWeight && targetWeight < weight) {
+      weeksToGoal = Math.round((weight - targetWeight) / Math.abs(weeklyChange));
+    }
+    return { calories, weeklyChange, weeksToGoal };
+  }
+
+  if (goal === "ganhar_massa") {
+    let surplus = 300;
+    if (targetWeight && targetWeight > weight) {
+      const diff = targetWeight - weight;
+      if (diff <= 5) surplus = 200;
+      else if (diff <= 15) surplus = 300;
+      else surplus = 400;
+    }
+    calories = tdee + surplus;
+    const weeklyChange = Math.round((surplus / 7700 * 7) * 10) / 10;
+    if (targetWeight && targetWeight > weight) {
+      weeksToGoal = Math.round((targetWeight - weight) / weeklyChange);
+    }
+    return { calories, weeklyChange, weeksToGoal };
+  }
+
+  return { calories: tdee, weeklyChange: 0, weeksToGoal: null };
+}
   gender: string
 ): { calories: number; weeklyChange: number; weeksToGoal: number | null } {
   // BMR com ajuste de gênero
