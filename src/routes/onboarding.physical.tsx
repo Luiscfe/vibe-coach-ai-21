@@ -67,43 +67,7 @@ function calcCalories(
 
   return { calories: tdee, weeklyChange: 0, weeksToGoal: null };
 }
-  gender: string
-): { calories: number; weeklyChange: number; weeksToGoal: number | null } {
-  // BMR com ajuste de gênero
-  const bmr = gender === "feminino"
-    ? 10 * weight + 6.25 * height - 5 * age - 161
-    : 10 * weight + 6.25 * height - 5 * age + 5;
 
-  const tdee = Math.round(bmr * 1.4); // atividade moderada
-
-  let calories = tdee;
-  let weeklyChange = 0;
-  let weeksToGoal: number | null = null;
-
-  if (goal === "emagrecer") {
-    // Déficit seguro: no máximo 1kg/semana (7700 kcal)
-    const deficit = targetWeight ? Math.min(500, Math.round((weight - targetWeight) * 100)) : 500;
-    calories = Math.max(1200, tdee - deficit); // nunca abaixo de 1200
-    weeklyChange = -Math.round((tdee - calories) / 1100 * 10) / 10; // kg/semana
-    if (targetWeight && targetWeight < weight) {
-      const totalKg = weight - targetWeight;
-      weeksToGoal = Math.round(totalKg / Math.abs(weeklyChange));
-    }
-  } else if (goal === "ganhar_massa") {
-    // Superávit moderado
-    const surplus = targetWeight ? Math.min(400, Math.round((targetWeight - weight) * 80)) : 300;
-    calories = tdee + Math.max(200, surplus);
-    weeklyChange = Math.round((calories - tdee) / 7700 * 10 * 7) / 10;
-    if (targetWeight && targetWeight > weight) {
-      const totalKg = targetWeight - weight;
-      weeksToGoal = Math.round(totalKg / weeklyChange);
-    }
-  } else {
-    calories = tdee;
-  }
-
-  return { calories: Math.round(calories), weeklyChange, weeksToGoal };
-}
 
 function PhysicalStep() {
   const { user, loading } = useAuth();
