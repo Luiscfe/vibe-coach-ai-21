@@ -216,6 +216,7 @@ function Landing() {
     </main>
   );
 }
+
 a[href*="lovable.dev"], iframe[src*="lovable.dev"], div[style*="Edit with Lovable"], .lovable-badge {
   display: none !important;
   opacity: 0 !important;
