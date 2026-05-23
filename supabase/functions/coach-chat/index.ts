@@ -66,14 +66,23 @@ ${recentMemoryNotes || "(ainda sem memórias)"}
 
 Regras: seja direta, empática, sem enrolação. Use português brasileiro. Responda em no máximo 4 parágrafos curtos. Nunca sugira algo da lista de "não gosta" ou que viole as restrições.`;
 
-    // Save the user message
-    if (userMessage) {
-      await fetch(`${SUPABASE_URL}/rest/v1/chat_messages`, {
-        method: "POST",
-        headers: { ...headers, "Content-Type": "application/json", Prefer: "return=minimal" },
-        body: JSON.stringify({ user_id: userId, role: "user", content: userMessage }),
-      });
-    }
+    // Save the user message first
+    await fetch(`${SUPABASE_URL}/rest/v1/chat_messages`, {
+      method: "POST",
+      headers: { ...headers, "Content-Type": "application/json", Prefer: "return=minimal" },
+      body: JSON.stringify({ user_id: userId, role: "user", content: userMessage }),
+    });
+
+    // Rebuild conversation history server-side (trust DB, not client)
+    const histRes = await fetch(
+      `${SUPABASE_URL}/rest/v1/chat_messages?user_id=eq.${userId}&select=role,content&order=created_at.desc&limit=30`,
+      { headers },
+    );
+    const histRaw = (await histRes.json()) as { role: string; content: string }[];
+    const history = histRaw
+      .filter((m) => m && (m.role === "user" || m.role === "assistant") && typeof m.content === "string")
+      .map((m) => ({ role: m.role, content: m.content.slice(0, 4000) }))
+      .reverse();
 
     // Call Lovable AI Gateway with streaming
     const aiResp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
@@ -81,7 +90,7 @@ Regras: seja direta, empática, sem enrolação. Use português brasileiro. Resp
       headers: { Authorization: `Bearer ${LOVABLE_API_KEY}`, "Content-Type": "application/json" },
       body: JSON.stringify({
         model: "google/gemini-2.5-flash",
-        messages: [{ role: "system", content: systemPrompt }, ...(messages ?? [])],
+        messages: [{ role: "system", content: systemPrompt }, ...history],
         stream: true,
       }),
     });
