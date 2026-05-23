@@ -22,7 +22,7 @@ function GroupPage() {
     const { data: ms } = await supabase.from("group_members").select("user_id, last_active_at, joined_at").eq("group_id", gm.group_id);
     if (ms) {
       const ids = ms.map((m: any) => m.user_id);
-      const { data: profs } = await supabase.from("profiles").select("id, name, current_streak").in("id", ids);
+      const { data: profs } = await supabase.rpc("get_group_member_profiles", { _user_ids: ids });
       setMembers(ms.map((m: any) => ({ ...m, profile: profs?.find((p: any) => p.id === m.user_id) })));
     }
     const { data: msgs } = await supabase.from("group_messages").select("*").eq("group_id", gm.group_id).order("created_at", { ascending: false }).limit(20);

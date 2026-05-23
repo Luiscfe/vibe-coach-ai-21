@@ -479,6 +479,15 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_group_member_profiles: {
+        Args: { _user_ids: string[] }
+        Returns: {
+          current_streak: number
+          goal: Database["public"]["Enums"]["user_goal"]
+          id: string
+          name: string
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
