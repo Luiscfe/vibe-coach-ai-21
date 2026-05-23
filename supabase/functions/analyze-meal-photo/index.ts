@@ -51,10 +51,30 @@ REFERÊNCIAS DE PORÇÕES TÍPICAS BRASILEIRAS:
             content: [
               { 
                 type: "text", 
-                text: `Analise esta foto com atenção máxima. 
-Observe a COR e TEXTURA da proteína para identificar corretamente se é carne bovina, frango, peixe ou outra.
-Identifique todos os alimentos visíveis, estime as porções e calcule as calorias totais.
-Use porções típicas de uma refeição brasileira adulta.` 
+                text: `Analise esta foto com máxima atenção antes de calcular qualquer valor:
+
+PASSO 1 — IDENTIFICAÇÃO:
+- Que alimento é esse exatamente? (tipo de bolo, tipo de café, etc.)
+- Qual o método de preparo visível?
+
+PASSO 2 — ESTIMATIVA DE VOLUME:
+- Qual a espessura estimada da fatia/porção? Considere que alimentos parecem mais finos em fotos do que são na realidade.
+- Qual o peso estimado realista em gramas?
+
+PASSO 3 — COMPOSIÇÃO:
+- Quais ingredientes principais compõem este alimento?
+- Use a tabela TACO para os valores por 100g de cada ingrediente.
+
+REFERÊNCIAS BRASILEIRAS:
+- Fatia de bolo simples (60g): 200 kcal, 3g prot, 35g carb, 6g gord
+- Fatia de bolo com cobertura (80g): 280 kcal, 4g prot, 45g carb, 10g gord
+- Café com leite integral (200ml): 80 kcal, 4g prot, 8g carb, 3g gord
+- Café preto (100ml): 5 kcal, 0g prot, 1g carb, 0g gord
+- Pão francês (50g): 135 kcal, 4g prot, 27g carb, 1g gord
+
+PASSO 4 — CÁLCULO FINAL:
+Some os valores de cada item identificado com as porções estimadas no Passo 2.
+Não superestime porções — uma fatia típica de bolo servida no Brasil pesa entre 50g e 80g.` 
               },
               { type: "image_url", image_url: { url: imageBase64 } },
             ],
