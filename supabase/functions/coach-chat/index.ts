@@ -22,7 +22,10 @@ function calcCyclePhase(startDate: string | null, duration: number | null): stri
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
   try {
-    const { messages, userMessage } = await req.json();
+    const { userMessage } = await req.json();
+    if (typeof userMessage !== "string" || !userMessage.trim() || userMessage.length > 4000) {
+      return new Response(JSON.stringify({ error: "invalid message" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    }
     const authHeader = req.headers.get("Authorization");
     if (!authHeader) return new Response(JSON.stringify({ error: "no auth" }), { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } });
 
