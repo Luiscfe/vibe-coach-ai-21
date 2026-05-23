@@ -476,27 +476,7 @@ export type Database = {
       }
     }
     Views: {
-      group_member_profiles: {
-        Row: {
-          current_streak: number | null
-          goal: Database["public"]["Enums"]["user_goal"] | null
-          id: string | null
-          name: string | null
-        }
-        Insert: {
-          current_streak?: number | null
-          goal?: Database["public"]["Enums"]["user_goal"] | null
-          id?: string | null
-          name?: string | null
-        }
-        Update: {
-          current_streak?: number | null
-          goal?: Database["public"]["Enums"]["user_goal"] | null
-          id?: string | null
-          name?: string | null
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Functions: {
       get_group_member_profiles: {
