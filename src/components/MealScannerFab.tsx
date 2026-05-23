@@ -50,7 +50,11 @@ function recalcCaloriesByWeight(original: Item, newWeight: number): number {
   return Math.round((original.calories / origWeight) * newWeight);
 }
 
-export function MealScannerFab({ onSaved }: { onSaved?: () => void }) {
+export function MealScannerFab({ onSaved, forceOpen, onClose }: { 
+  onSaved?: () => void; 
+  forceOpen?: boolean;
+  onClose?: () => void;
+}) {
   const { user } = useAuth();
   const inputRef = useRef<HTMLInputElement>(null);
   const galleryRef = useRef<HTMLInputElement>(null);
@@ -61,7 +65,8 @@ export function MealScannerFab({ onSaved }: { onSaved?: () => void }) {
   const [editedItems, setEditedItems] = useState<Item[]>([]);
   const [editingIdx, setEditingIdx] = useState<number | null>(null);
   const [editingField, setEditingField] = useState<"weight" | "calories" | null>(null);
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(forceOpen ?? false);
+const [showOptions, setShowOptions] = useState(forceOpen ?? false);
   const [showOptions, setShowOptions] = useState(false);
   // Novo item manual
   const [showAddItem, setShowAddItem] = useState(false);
@@ -158,6 +163,7 @@ export function MealScannerFab({ onSaved }: { onSaved?: () => void }) {
     setEditingField(null);
     setShowAddItem(false);
     setNewItemName(""); setNewItemWeight(""); setNewItemCal("");
+    onClose?.(); // ← adiciona essa linha
   }
 
   async function save() {
