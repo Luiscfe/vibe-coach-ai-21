@@ -378,18 +378,27 @@ const [showOptions, setShowOptions] = useState(forceOpen ?? false);
                 </div>
               )}
 
-              {!loading && !result && editedItems.length === 0 && (
-                <div className="mt-4 space-y-2">
-                  <button onClick={cameraClick}
-                    className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-sunrise py-3 text-sm font-medium text-primary-foreground">
-                    <Camera className="size-4" /> Tirar outra foto
-                  </button>
-                  <button onClick={close}
-                    className="flex w-full items-center justify-center gap-2 rounded-2xl border border-border py-3 text-sm">
-                    Cancelar
-                  </button>
-                </div>
-              )}
+             {!loading && !result && editedItems.length === 0 && (
+  <div className="mt-4 space-y-2">
+    <button onClick={cameraClick}
+      className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-sunrise py-3 text-sm font-medium text-primary-foreground">
+      <Camera className="size-4" /> Tirar foto
+    </button>
+    <button onClick={() => galleryRef.current?.click()}
+      className="flex w-full items-center justify-center gap-2 rounded-2xl border border-border bg-card py-3 text-sm font-medium">
+      <svg className="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <rect x="3" y="3" width="18" height="18" rx="2" ry="2" strokeWidth="2"/>
+        <circle cx="8.5" cy="8.5" r="1.5" strokeWidth="2"/>
+        <polyline points="21 15 16 10 5 21" strokeWidth="2"/>
+      </svg>
+      Galeria
+    </button>
+    <button onClick={close}
+      className="flex w-full items-center justify-center gap-2 rounded-2xl border border-border py-3 text-sm text-muted-foreground">
+      Cancelar
+    </button>
+  </div>
+)}
             </motion.div>
           </motion.div>
         )}
