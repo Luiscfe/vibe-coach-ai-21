@@ -67,7 +67,7 @@ export function MealScannerFab({ onSaved, forceOpen, onClose }: {
   const [editingField, setEditingField] = useState<"weight" | "calories" | null>(null);
   const [open, setOpen] = useState(forceOpen ?? false);
 const [showOptions, setShowOptions] = useState(forceOpen ?? false);
-  const [showOptions, setShowOptions] = useState(false);
+  
   // Novo item manual
   const [showAddItem, setShowAddItem] = useState(false);
   const [newItemName, setNewItemName] = useState("");
